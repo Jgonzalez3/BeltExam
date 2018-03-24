@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Quotes</title>
+</head>
+<body>
+    <header>
+        <a href="/quotes">Dashboard</a><span> | </span>
+        <form action="/logout" method="post">
+            {% csrf_token %}
+            <input id="logout" type="submit" value="Logout">
+        </form>
+    </header>
+    <!-- add post count -->
+    <div class="postcount">
+        <p>Post by {request.session.name}</p>
+        <p>Counts: {post counts}</p>
+    </div>
+    <!-- add posts by user -->
+    <div class="posts">
+        {% for post in posts %}
+        <p>{quoter}: {message}</p>
+        {% endfor %}
+    </div>
+</body>
+</html>
