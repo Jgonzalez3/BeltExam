@@ -58,9 +58,9 @@ class QuoteValidationManager(models.Manager):
     def quote_validator(self, postData):
         quoteserrors = {}
         if len(postData['quoter']) < 4:
-            quoteserrors["quoter"] = "Quote must be more than 3 characters"
+            quoteserrors["quoter"] = "Quoted by name must be more than 3 characters"
         if len(postData['message']) < 11:
-            quoteserrors["message"]
+            quoteserrors["message"] = "Message must be more than 10 characters"
         return quoteserrors
 
 class Users(models.Model):

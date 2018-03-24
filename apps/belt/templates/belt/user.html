@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Quotes</title>
+    <title>User</title>
 </head>
 <body>
     <header>
@@ -16,13 +16,14 @@
     </header>
     <!-- add post count -->
     <div class="postcount">
-        <p>Post by {request.session.name}</p>
-        <p>Counts: {post counts}</p>
+        <h3>Post by {{name.name}}</h3>
+        <p>Counts: {{count}}</p>
     </div>
     <!-- add posts by user -->
     <div class="posts">
+        <h4>Quotes Posted By {{name.name}}</h4>
         {% for post in posts %}
-        <p>{quoter}: {message}</p>
+        <p>{{post.quoter}}: {{post.quote}}</p>
         {% endfor %}
     </div>
 </body>

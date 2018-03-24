@@ -44,18 +44,12 @@ def login(request):
         return redirect("/quotes")
 
 def quotes(request):
-# work on getting user name instead of user id for quotes listed below:
-    # favequery = Faves.objects.filter(userfave=Users.objects.get(id=int(request.session["user_id"])))
-    # quotequery = Quotes.quotesobjects.filter(user=Users.objects.get(id=int(request.session['user_id'])))
-    # Users.objects.raw('SELECT faves.id, quotes.quote, quotes.quoter, users.name FROM users JOIN  ')
-    # 
-# 
-    context = {
-        'quotes': Quotes.quotesobjects.all().select_related("user").exclude(user = request.session["user_id"]),
-        'faves': Faves.objects.all().select_related('favequote').select_related("userfave")
-        }
     if "user_id" not in request.session:
         return redirect("/")
+    context = {
+        'quotes': Quotes.quotesobjects.all().exclude(user=Users.objects.filter(id=request.session["user_id"])), 
+        'faves': Faves.objects.select_related('favequote').filter(userfave=Users.objects.get(id=request.session["user_id"]))
+    }
     return render(request, "belt/quotes.html", context)
 
 def addquote(request):
@@ -64,7 +58,7 @@ def addquote(request):
         if len(quoteserrors):
             for tag, quoteserror in quoteserrors.iteritems():
                 messages.error(request, quoteserror, extra_tags=tag)
-            return redirect("/")
+            return redirect("/quotes")
         else:
             quotes = Quotes.quotesobjects.create(quote = request.POST["message"], quoter = request.POST["quoter"], user = Users.objects.get(id = int(request.session["user_id"])))
             quotes.save()
@@ -72,9 +66,8 @@ def addquote(request):
 
 def addtomylist(request):
     if request.method == 'POST':
-        faves = Faves.objects.create(userfave = Users.objects.get(id=int(request.session["user_id"])), favequote = Quotes.quotesobjects.get(id=int(request.POST["quoteid"])))
+        faves = Faves.objects.create(userfave = Users.objects.get(id=request.session["user_id"]), favequote = Quotes.quotesobjects.get(id=int(request.POST["quoteid"])))
         faves.save()
-
     return redirect("/quotes")
 
 def remove(request):
@@ -83,10 +76,14 @@ def remove(request):
     return redirect("/quotes")
 
 def user(request, id):
+    if "user_id" not in request.session:
+        return redirect("/")
     context = {
-        ""
+        "name": Users.objects.get(id = id),
+        "count": Quotes.quotesobjects.filter(user = Users.objects.get(id = id)).count(),
+        "posts": Quotes.quotesobjects.filter(user = Users.objects.get(id = id))
     }
-    return HttpResponse(context)
+    return render(request, "belt/user.html", context)
 
 def logout(request):
     if request.method == "POST":
