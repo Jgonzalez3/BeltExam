@@ -47,8 +47,9 @@ def quotes(request):
     if "user_id" not in request.session:
         return redirect("/")
     context = {
-        'quotes': Quotes.quotesobjects.all().exclude(user=Users.objects.filter(id=request.session["user_id"])), 
-        'faves': Faves.objects.select_related('favequote').filter(userfave=Users.objects.get(id=request.session["user_id"]))
+        'quotes': Quotes.quotesobjects.exclude(favequote__userfave__id=request.session["user_id"]).exclude(user=Users.objects.filter(id=request.session["user_id"])),
+        # Quotes.quotesobjects.all().exclude(user=Users.objects.filter(id=request.session["user_id"])
+        'faves': Faves.objects.select_related('favequote').filter(userfave=Users.objects.get(id=request.session["user_id"])),
     }
     return render(request, "belt/quotes.html", context)
 
@@ -86,8 +87,7 @@ def user(request, id):
     return render(request, "belt/user.html", context)
 
 def logout(request):
-    if request.method == "POST":
-        for key in request.session.keys():
-            request.session.pop(key)
-        return redirect("/")
+    for key in request.session.keys():
+        request.session.pop(key)
+    return redirect("/")
 

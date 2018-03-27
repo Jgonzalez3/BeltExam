@@ -8,15 +8,11 @@
 </head>
 <body>
     <header>
-        <a href="/quotes">Dashboard</a><span> | </span>
-        <form action="/logout" method="post">
-            {% csrf_token %}
-            <input id="logout" type="submit" value="Logout">
-        </form>
+        <a href="/quotes">Dashboard</a><span> | </span> <a href="/logout">Logout</a>
     </header>
     <!-- add post count -->
     <div class="postcount">
-        <h3>Post by {{name.name}}</h3>
+        <h3>Posts by {{name.name}}</h3>
         <p>Counts: {{count}}</p>
     </div>
     <!-- add posts by user -->

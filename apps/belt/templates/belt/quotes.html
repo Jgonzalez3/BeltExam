@@ -8,28 +8,24 @@
 </head>
 <body>
     <div class="wrapper">
-        <header><a href="/"></a>
-            <form action="/logout" method="post">
-                {% csrf_token %}
-                <input id="logout" type="submit" value="Logout">
-            </form>
+        <header><a href="/"></a> <a href="/logout">Logout</a>
         </header>
         <h1>Welcome, {{request.session.name}}!</h1><br>
         <div class="leftcontainer">
             <h3>Quotable Quotes</h3>
             <div class="allquotes">
                 {% for message in quotes %}
-                <p>{{message.quoter}}: {{message.quote}}
-                    <p>Posted by <a href="/users/{{message.user.id}}">{{message.user.name}}</a></p>
-                    <form action="/addtomylist" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="quoteid" value={{message.id}}>
-                        <input type="submit" value="Add to My List">
-                    </form>
-                </p>
+                    <p>{{message.quoter}}: {{message.quote}}
+                        <p>Posted by <a href="/users/{{message.user.id}}">{{message.user.name}}</a></p>
+                        <form action="/addtomylist" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="quoteid" value={{message.id}}>
+                            <input type="submit" value="Add to My List">
+                        </form>
+                    </p>
                 {% endfor %}
             </div><br>
-            
+
         </div>
         <div class="rightcontainer">
             <h3>Your Favorites</h3>
